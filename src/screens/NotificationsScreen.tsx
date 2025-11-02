@@ -1,41 +1,43 @@
-import React, { useState } from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
-import { ThemedView, ThemedText, ThemedCard } from '../ui/Themed';
+import React from 'react';
+import { FlatList, View, Text, TouchableOpacity } from 'react-native';
+import { useNotifications } from '../notifications/NotificationsContext';
 
-type Notice = { id: string; title: string; body?: string; ts?: string };
-
-export default function NotificationsScreen() {
-  const [items] = useState<Notice[]>([]);
-
-  if (items.length === 0) {
-    return (
-      <ThemedView style={s.center}>
-        <ThemedText style={s.title}>No notifications</ThemedText>
-        <ThemedText style={{ opacity:0.7 }}>You’ll see your updates here.</ThemedText>
-      </ThemedView>
-    );
-  }
-
+function Item({ id, title, body, read, receivedAt, onPress }: any) {
   return (
-    <FlatList
-      data={items}
-      keyExtractor={(it) => it.id}
-      renderItem={({ item }) => (
-        <ThemedCard style={s.card}>
-          <ThemedText style={s.cardTitle}>{item.title}</ThemedText>
-          {!!item.body && <ThemedText style={{ marginTop: 4 }}>{item.body}</ThemedText>}
-          {!!item.ts && <ThemedText style={{ opacity:0.7, marginTop: 6, fontSize: 12 }}>{item.ts}</ThemedText>}
-        </ThemedCard>
-      )}
-      contentContainerStyle={{ padding: 16 }}
-      ItemSeparatorComponent={() => <View style={{ height: 8 }} />}
-    />
+    <TouchableOpacity onPress={onPress} style={{ padding: 14, backgroundColor: read ? '#fff' : '#eef6ff', borderRadius: 12 }}>
+      <Text style={{ fontWeight: '600' }}>{title}</Text>
+      {!!body && <Text style={{ marginTop: 4, color: '#374151' }}>{body}</Text>}
+      <Text style={{ marginTop: 6, fontSize: 12, color: '#6b7280' }}>
+        {new Date(receivedAt).toLocaleString()}
+      </Text>
+    </TouchableOpacity>
   );
 }
 
-const s = StyleSheet.create({
-  center: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-  title: { fontSize: 18, fontWeight: '800', marginBottom: 6 },
-  card: { borderRadius: 12, padding: 12 },
-  cardTitle: { fontWeight: '800' },
-});
+export default function NotificationsScreen() {
+  const { items, unread, setRead, setAllRead, reset } = useNotifications();
+
+  return (
+    <View style={{ flex: 1 }}>
+      <View style={{ flexDirection: 'row', gap: 12, padding: 12, borderBottomWidth: 1, borderColor: '#e5e7eb' }}>
+        <Text style={{ fontWeight: '700', fontSize: 18 }}>Notifications ({unread} unread)</Text>
+        <View style={{ flex: 1 }} />
+        <TouchableOpacity onPress={setAllRead}><Text style={{ color: '#2563eb' }}>Mark all read</Text></TouchableOpacity>
+        <TouchableOpacity onPress={reset}><Text style={{ color: '#ef4444' }}>Clear</Text></TouchableOpacity>
+      </View>
+
+      <FlatList
+        data={items}
+        keyExtractor={(x) => x.id}
+        ItemSeparatorComponent={() => <View style={{ height: 8 }} />}
+        contentContainerStyle={{ padding: 12 }}
+        renderItem={({ item }) => (
+          <Item
+            {...item}
+            onPress={() => setRead(item.id, !item.read)}
+          />
+        )}
+      />
+    </View>
+  );
+}

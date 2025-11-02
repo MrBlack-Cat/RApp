@@ -27,9 +27,7 @@ export default function ThemeModeSwitch() {
         <ThemedText style={{ fontWeight: '800', color: c.primary }}>{label}</ThemedText>
       </TouchableOpacity>
 
-      <ThemedText style={{ marginTop: 6, color: c.muted }}>
-        Tap to switch theme (light / dark / auto)
-      </ThemedText>
+
     </View>
   );
 }

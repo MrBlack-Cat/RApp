@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "33713475260",
+    "project_id": "rapp-c6efe",
+    "storage_bucket": "rapp-c6efe.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:33713475260:android:53a0e4f8ac36632103cab9",
+        "android_client_info": {
+          "package_name": "com.rapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANPC-1CDFADSdwR-9Xgm0GMGP-rkBM1dA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

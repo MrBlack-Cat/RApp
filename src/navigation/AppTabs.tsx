@@ -88,26 +88,24 @@ import TabIcon from '../components/TabIcon';
 
 import { useColors } from '../ui/Themed';
 import { useThemeMode } from '../theme/ThemeMode';
+import { useNotifications } from '../notifications/NotificationsContext';
 
 const Tab = createBottomTabNavigator<TabsParamList>();
 
 export default function AppTabs() {
   const c = useColors();
   const { isDark } = useThemeMode();
+  const { unread } = useNotifications();
 
   return (
     <Tab.Navigator
-      key={isDark ? 'tabs-dark' : 'tabs-light'} 
+      key={isDark ? 'tabs-dark' : 'tabs-light'}
       screenOptions={{
         headerShown: false,
         tabBarShowLabel: false,
         tabBarActiveTintColor: c.primary,
         tabBarInactiveTintColor: c.muted,
-        tabBarStyle: {
-          backgroundColor: c.card,
-          borderTopColor: c.border,
-        },
-        
+        tabBarStyle: { backgroundColor: c.card, borderTopColor: c.border },
       }}
     >
       <Tab.Screen
@@ -126,6 +124,7 @@ export default function AppTabs() {
           tabBarIcon: ({ focused, color }) => (
             <TabIcon Icon={BellIcon} focused={focused} color={color} size={26} strokeWidth={1.6} />
           ),
+          tabBarBadge: unread > 0 ? unread : undefined, 
         }}
       />
       <Tab.Screen
