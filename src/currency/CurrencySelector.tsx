@@ -1,32 +1,40 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import { useCurrency, type Currency } from './CurrencyContext';
+import { ThemedText, useColors } from '../ui/Themed';
 
-const OPTIONS: Currency[] = ['USD','EUR','AZN','TRY','RUB'];
+const OPTIONS: Currency[] = ['USD', 'EUR', 'AZN', 'TRY', 'RUB'];
 
 export default function CurrencySelector() {
   const { currency, setCurrency } = useCurrency();
+  const c = useColors();
 
   return (
-    <View style={s.wrap}>
-      <Text style={s.label}>Currency</Text>
-      <View style={s.row}>
-        {OPTIONS.map(c => (
-          <TouchableOpacity key={c} onPress={() => setCurrency(c)} style={[s.pill, currency === c && s.pillOn]}>
-            <Text style={[s.pillTxt, currency === c && s.pillTxtOn]}>{c}</Text>
-          </TouchableOpacity>
-        ))}
+    <View style={{ marginTop: 12 }}>
+      <ThemedText style={{ fontWeight: '800', marginBottom: 8 }}>Currency</ThemedText>
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
+        {OPTIONS.map(opt => {
+          const active = currency === opt;
+          return (
+            <TouchableOpacity
+              key={opt}
+              onPress={() => setCurrency(opt)}
+              style={{
+                paddingHorizontal: 12,
+                paddingVertical: 8,
+                borderRadius: 20,
+                borderWidth: 1,
+                borderColor: active ? c.pillOnBorder : c.border,
+                backgroundColor: active ? c.pillOnBg : 'transparent',
+              }}
+            >
+              <ThemedText style={{ fontWeight: '700', color: active ? c.pillOnBorder : c.text }}>
+                {opt}
+              </ThemedText>
+            </TouchableOpacity>
+          );
+        })}
       </View>
     </View>
   );
 }
-
-const s = StyleSheet.create({
-  wrap:{ marginTop:12 },
-  label:{ fontWeight:'800', marginBottom:8 },
-  row:{ flexDirection:'row', flexWrap:'wrap', gap:8 },
-  pill:{ paddingHorizontal:12, paddingVertical:8, borderRadius:20, borderWidth:1, borderColor:'#ddd' },
-  pillOn:{ borderColor:'#8E6CEF', backgroundColor:'#F3EEFF' },
-  pillTxt:{ fontWeight:'700', color:'#333' },
-  pillTxtOn:{ color:'#8E6CEF' },
-});

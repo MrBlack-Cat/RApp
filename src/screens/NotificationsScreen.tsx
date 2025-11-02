@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { FlatList, StyleSheet, View } from 'react-native';
+import { ThemedView, ThemedText, ThemedCard } from '../ui/Themed';
 
 type Notice = { id: string; title: string; body?: string; ts?: string };
 
 export default function NotificationsScreen() {
-  const [items] = useState<Notice[]>([
-  ]);
+  const [items] = useState<Notice[]>([]);
 
   if (items.length === 0) {
     return (
-      <View style={s.center}>
-        <Text style={s.title}>No notifications</Text>
-        <Text style={s.muted}>You’ll see your updates here.</Text>
-      </View>
+      <ThemedView style={s.center}>
+        <ThemedText style={s.title}>No notifications</ThemedText>
+        <ThemedText style={{ opacity:0.7 }}>You’ll see your updates here.</ThemedText>
+      </ThemedView>
     );
   }
 
@@ -21,11 +21,11 @@ export default function NotificationsScreen() {
       data={items}
       keyExtractor={(it) => it.id}
       renderItem={({ item }) => (
-        <View style={s.card}>
-          <Text style={s.cardTitle}>{item.title}</Text>
-          {!!item.body && <Text style={s.cardBody}>{item.body}</Text>}
-          {!!item.ts && <Text style={s.cardTs}>{item.ts}</Text>}
-        </View>
+        <ThemedCard style={s.card}>
+          <ThemedText style={s.cardTitle}>{item.title}</ThemedText>
+          {!!item.body && <ThemedText style={{ marginTop: 4 }}>{item.body}</ThemedText>}
+          {!!item.ts && <ThemedText style={{ opacity:0.7, marginTop: 6, fontSize: 12 }}>{item.ts}</ThemedText>}
+        </ThemedCard>
       )}
       contentContainerStyle={{ padding: 16 }}
       ItemSeparatorComponent={() => <View style={{ height: 8 }} />}
@@ -34,11 +34,8 @@ export default function NotificationsScreen() {
 }
 
 const s = StyleSheet.create({
-  center: { flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff' },
+  center: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   title: { fontSize: 18, fontWeight: '800', marginBottom: 6 },
-  muted: { color: '#6b7280' },
-  card: { backgroundColor: '#F6F7F9', borderRadius: 12, padding: 12 },
+  card: { borderRadius: 12, padding: 12 },
   cardTitle: { fontWeight: '800' },
-  cardBody: { color: '#374151', marginTop: 4 },
-  cardTs: { color: '#9CA3AF', marginTop: 6, fontSize: 12 },
 });

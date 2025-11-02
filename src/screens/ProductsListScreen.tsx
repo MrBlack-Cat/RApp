@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, FlatList, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, FlatList, StyleSheet, View } from 'react-native';
+import { ThemedView, ThemedText } from '../ui/Themed';
 import { getAllProducts, getNewProducts, type ProductDto } from '../api/products';
 import ProductCard from '../components/ProductCard';
 
@@ -23,7 +24,7 @@ export default function ProductsListScreen({ route, navigation }: any) {
   if (loading) return <View style={s.center}><ActivityIndicator /></View>;
 
   return (
-    <View style={s.container}>
+    <ThemedView style={s.container}>
       <FlatList
         data={items}
         keyExtractor={(it)=>it.id}
@@ -32,14 +33,14 @@ export default function ProductsListScreen({ route, navigation }: any) {
         renderItem={({ item }) => (
           <ProductCard item={item} onOpen={(id)=>navigation.navigate('ProductDetails', { id })}/>
         )}
-        contentContainerStyle={{ paddingBottom: 16 }}
-        ListEmptyComponent={<Text style={{ color:'#888' }}>No products</Text>}
+        contentContainerStyle={{ paddingBottom: 16, padding:16 }}
+        ListEmptyComponent={<ThemedText style={{ opacity:0.7 }}>No products</ThemedText>}
       />
-    </View>
+    </ThemedView>
   );
 }
 
 const s = StyleSheet.create({
-  container:{ flex:1, backgroundColor:'#fff', padding:16 },
+  container:{ flex:1 },
   center:{ flex:1, alignItems:'center', justifyContent:'center' },
 });

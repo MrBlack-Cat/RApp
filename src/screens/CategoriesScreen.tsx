@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import {
-  View, Text, TouchableOpacity, Image, StyleSheet, ActivityIndicator, FlatList
-} from 'react-native';
+import { ActivityIndicator, FlatList, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { getCategoriesFromProducts, type CategoryDto } from '../api/products';
+import { ThemedView, ThemedText, ThemedCard } from '../ui/Themed';
 
 export default function CategoriesScreen() {
   const navigation = useNavigation<any>();
@@ -13,7 +12,7 @@ export default function CategoriesScreen() {
   useEffect(() => {
     (async () => {
       try {
-        const data = await getCategoriesFromProducts(); 
+        const data = await getCategoriesFromProducts();
         setCats(Array.isArray(data) ? data : []);
       } finally {
         setLoading(false);
@@ -24,29 +23,30 @@ export default function CategoriesScreen() {
   if (loading) return <View style={s.center}><ActivityIndicator /></View>;
 
   return (
-    <View style={s.container}>
+    <ThemedView style={s.container}>
       <FlatList
         data={cats}
         keyExtractor={(it) => it.slug}
         renderItem={({ item }) => (
           <TouchableOpacity
-            style={s.card}
             onPress={() => navigation.navigate('CategoryProducts', { categoryId: item.slug, name: item.name })}
           >
-            <Image source={{ uri: item.image || 'https://via.placeholder.com/120?text=%20' }} style={s.icon}/>
-            <Text style={s.text}>{item.name}</Text>
+            <ThemedCard style={s.card}>
+              <Image source={{ uri: item.image || 'https://via.placeholder.com/120?text=%20' }} style={s.icon}/>
+              <ThemedText style={s.text}>{item.name}</ThemedText>
+            </ThemedCard>
           </TouchableOpacity>
         )}
-        contentContainerStyle={{ paddingBottom: 16 }}
+        contentContainerStyle={{ paddingBottom: 16, padding:16 }}
       />
-    </View>
+    </ThemedView>
   );
 }
 
 const s = StyleSheet.create({
-  container:{ flex:1, backgroundColor:'#fff', padding:16 },
+  container:{ flex:1 },
   center:{ flex:1, justifyContent:'center', alignItems:'center' },
-  card:{ flexDirection:'row', alignItems:'center', backgroundColor:'#F6F7F9', padding:14, borderRadius:12, marginBottom:10 },
+  card:{ flexDirection:'row', alignItems:'center', padding:14, borderRadius:12, marginBottom:10 },
   icon:{ width:50, height:50, borderRadius:10, backgroundColor:'#eee', marginRight:12 },
-  text:{ fontSize:16, fontWeight:'700' }
+  text:{ fontSize:16, fontWeight:'700' },
 });

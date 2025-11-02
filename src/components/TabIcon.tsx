@@ -1,13 +1,14 @@
 import React from 'react';
 import type { SvgProps } from 'react-native-svg';
+import { useColors } from '../ui/Themed';
 
 type Props = {
   Icon: React.FC<SvgProps>;
   focused: boolean;
-  color?: string;          
+  color?: string;
   size?: number;
-  mode?: 'stroke' | 'fill'; 
-  strokeWidth?: number;     
+  mode?: 'stroke' | 'fill';
+  strokeWidth?: number;
 };
 
 export default function TabIcon({
@@ -18,18 +19,17 @@ export default function TabIcon({
   mode = 'stroke',
   strokeWidth,
 }: Props) {
-  const active = '#8E6CEF';
-  const inactive = '#9CA3AF';
-  const c = color ?? (focused ? active : inactive);
-  const opacity = focused ? 1 : 0.7;
+  const c = useColors();
+  const tint = color ?? (focused ? c.primary : c.muted);
+  const opacity = focused ? 1 : 0.8;
 
   return (
     <Icon
       width={size}
       height={size}
-      color={c}
-      stroke={c}
-      fill={mode === 'fill' ? c : 'none'}
+      color={tint}
+      stroke={mode === 'stroke' ? tint : 'none'}
+      fill={mode === 'fill' ? tint : 'none'}
       opacity={opacity}
       {...(strokeWidth ? { strokeWidth } : {})}
     />
